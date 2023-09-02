@@ -1,6 +1,8 @@
 1. read image, use tesseract to pull out text
 
-2. 
+2. iterate over som sample images -- test tesseract's funcitonality
+
+3. 
 
 --NEEDS--
 
