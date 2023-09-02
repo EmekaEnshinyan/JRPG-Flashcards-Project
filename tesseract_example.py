@@ -1,15 +1,30 @@
+''''
+Image - from image format class, used to represent a PIL image. 
+Image functions:
+https://omz-software.com/pythonista/docs/ios/Image.html
+
+'''
+
 import pytesseract
 from PIL import Image, ImageEnhance, ImageFilter
 import os
 import random
 
-imageRoot = "../corpus/final_fantasy_4"
-outputRoot = "../tmp/"
-imageFns = os.listdir(imageRoot)
-random.shuffle(imageFns)
-imageFn = imageFns[0]
+#Emeka's imageRoot
+imageRoot = "/home/emeka/Documents/final_fantasy_4"
+#Tim's imageRoot
+# imageRoot = "../corpus/final_fantasy_4"
+outputRoot = "/home/emeka/Documents/tmp/"
+
+def grabRandomImage(rootPath):
+    imageFns = os.listdir(rootPath)
+    random.shuffle(imageFns)
+    return imageFns[0]
+
+# imageFn = grabRandomImage(imageRoot)
 imageFn = "2023072917271300-7E5C8E902A2AFEF28B1FE30BC0B2FB8A.jpg"
 
+#Image - 
 img = Image.open(os.path.join(imageRoot, imageFn))
 
 # suggested by chatgpt for preprocessing the image
@@ -20,7 +35,6 @@ img = enhancer.enhance(1.0)  # Adjust the enhancement factor as needed
 img = img.convert("L")  # Convert to grayscale
 threshold = 128  # Adjust the threshold as needed
 img = img.point(lambda p: p > threshold and 255)
-
 
 # Define the coordinates of the cropping region (left, upper, right, lower)
 left = 255  # X-coordinate of the left edge of the cropping region
@@ -33,7 +47,11 @@ img = img.crop((left, upper, right, lower))
 
 img.save(os.path.join(outputRoot, imageFn))
 
-config = '--tessdata-dir "/Users/tmahrt/Downloads/tesseract_data"'
+#Emeka's dir
+config = '--tessdata-dir "/home/emeka/Documents/tesseract_data"'
+
+#Tim's dir
+#config = '--tessdata-dir "/Users/tmahrt/Downloads/tesseract_data"'
 text = pytesseract.image_to_string(img, lang="jpn", config=config)
 print(imageFn)
 print(text.replace(" ", "").replace("\n", ""))

@@ -1,0 +1,8 @@
+1. read image, use tesseract to pull out text
+
+2. 
+
+--NEEDS--
+
+- image recognition
+- 
