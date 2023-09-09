@@ -1,10 +1,45 @@
 1. read image, use tesseract to pull out text
 
-2. iterate over som sample images -- test tesseract's funcitonality
+2. translating text and extract
 
-3. 
+3. create flashcards
 
 --NEEDS--
 
 - image recognition
-- 
+
+--RESOUCES--
+
+OpenNMT:
+
+OpenNMT is an open-source neural machine translation framework. You can use it to train custom translation models for various language pairs, including Japanese to English.
+Website: OpenNMT
+
+Apertium:
+
+Apertium is a free and open-source machine translation platform. While it primarily focuses on languages with less translation coverage, there are translation modules available for Japanese to English.
+Website: Apertium
+
+Marian-NMT:
+
+Marian-NMT is another open-source neural machine translation framework. It offers pre-trained models for various language pairs, including Japanese to English.
+GitHub Repository: Marian-NMT
+
+Moses:
+
+Moses is an open-source statistical machine translation system. While it's older technology compared to neural machine translation, it can still provide decent translations for various language pairs, including Japanese to English.
+GitHub Repository: Moses
+
+T2T (Tensor2Tensor):
+
+Tensor2Tensor is an open-source machine learning library developed by Google. It includes a translation module that can be used for Japanese to English translation.
+GitHub Repository: Tensor2Tensor
+
+Google Cloud Translation API (Limited Free Tier):
+
+Google Cloud offers a Translation API that can be used for Japanese to English translation. While it's not fully open-source, it does have a limited free tier.
+Website: Google Cloud Translation API
+
+https://cloud.google.com/translate/docs/authentication
+
+https://cloud.google.com/python/docs/reference/apikeys/latest
