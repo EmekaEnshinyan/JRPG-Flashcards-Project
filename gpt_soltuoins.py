@@ -12,9 +12,11 @@ def rename_jpg_files(directory):
 
     # Iterate through the files
     for filename in files:
+
         if filename.endswith(".jpg"):
+            filenumerator = "0"
             # Construct the new filename as you desire
-            new_filename = "new_" + filename  # You can customize the new name here
+            new_filename = filenumerator + filename  # You can customize the new name here
 
             # Build the full paths for the old and new filenames
             old_path = os.path.join(directory, filename)
@@ -26,6 +28,7 @@ def rename_jpg_files(directory):
                 print(f"Renamed '{filename}' to '{new_filename}'")
             except Exception as e:
                 print(f"Error renaming '{filename}': {e}")
+            filenumerator += filenumerator
 
 if __name__ == "__main__":
     directory = "/path/to/your/directory"  # Replace with the directory path containing your .jpg files

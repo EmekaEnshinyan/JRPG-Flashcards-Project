@@ -103,4 +103,4 @@ if __name__ == "__main__":
     outputRoot = "/home/emeka/Documents/tmp/"
     renameImage(imageRoot)
     for filename in os.listdir(imageRoot):
-        extractTextFromImage(os.path.join(imageRoot, filename))
+        extractTextFromImages(os.path.join(imageRoot, filename))
