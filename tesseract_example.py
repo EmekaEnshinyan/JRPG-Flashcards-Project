@@ -8,6 +8,8 @@ import pytesseract
 from PIL import Image, ImageEnhance, ImageFilter
 #from google.cloud import translate
 import os
+import openpyxl as opx
+import re
 
 
 
@@ -20,9 +22,7 @@ def renameImage(rootPath):
     #check if dir exists
     if not os.path.exists(rootPath):
         print(f"the directory '{rootPath}' does not exist.")
-        return
-    for i in imageFns:
-        pass
+        return 
 
 
 def extractTextFromImages(path):
@@ -62,7 +62,18 @@ def extractTextFromImages(path):
         print(text.replace(" ", "").replace("\n", ""))
         print("\n\n")
 
-
+#need to add some exception manager
+def addTextToFile(extractedText: str) -> None:
+    workbook = opx.Workbook()
+    sheet = workbook.active
+    for wbCell in workbook:
+        #converts str to int, increment by 1, convert back to str
+        col = '1'    
+        #a(num)
+        #increment by 1
+        sheet['A{col}'] = extractedText
+        match = re.search(r"\d+", col)
+        coltoint = str(int(match) + 1)
     
 
 '''
@@ -103,4 +114,5 @@ if __name__ == "__main__":
     outputRoot = "/home/emeka/Documents/tmp/"
     renameImage(imageRoot)
     for filename in os.listdir(imageRoot):
-        extractTextFromImages(os.path.join(imageRoot, filename))
+        texttoexcel = extractTextFromImages(os.path.join(imageRoot, filename))
+        addTextToFile(texttoexcel)
