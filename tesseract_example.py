@@ -61,19 +61,6 @@ def extractTextFromImages(path):
         print()
         print(text.replace(" ", "").replace("\n", ""))
         print("\n\n")
-
-#need to add some exception manager
-def addTextToFile(extractedText: str) -> None:
-    workbook = opx.Workbook()
-    sheet = workbook.active
-    for column in workbook:
-        #converts str to int, increment by 1, convert back to str
-        col = '1'    
-        #a(num)
-        #increment by 1
-        sheet['A{col}'] = extractedText
-        reg = re.search(r"\d+", col)
-        str(int(reg) + 1)
     
 
 '''
@@ -115,4 +102,17 @@ if __name__ == "__main__":
     renameImage(imageRoot)
     for filename in os.listdir(imageRoot):
         texttoexcel = extractTextFromImages(os.path.join(imageRoot, filename))
-        addTextToFile(texttoexcel)
+    #send text to excel sheet
+    workbook = opx.Workbook()
+    sheet = workbook.active
+    for column in workbook:
+        #converts str to int, increment by 1, convert back to str
+        col = '1'    
+        #a(num)
+        #increment by 1
+        cellvalue = 'a{}'.format(col)
+        sheet[cellvalue] = texttoexcel
+        reg = re.search(r"\d+", col)
+        str(int(reg) + 1)
+    
+    #provide dir for excel file below
