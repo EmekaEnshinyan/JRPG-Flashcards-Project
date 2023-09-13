@@ -66,14 +66,14 @@ def extractTextFromImages(path):
 def addTextToFile(extractedText: str) -> None:
     workbook = opx.Workbook()
     sheet = workbook.active
-    for wbCell in workbook:
+    for column in workbook:
         #converts str to int, increment by 1, convert back to str
         col = '1'    
         #a(num)
         #increment by 1
         sheet['A{col}'] = extractedText
-        match = re.search(r"\d+", col)
-        coltoint = str(int(match) + 1)
+        reg = re.search(r"\d+", col)
+        str(int(reg) + 1)
     
 
 '''
