@@ -1,34 +1,6 @@
 import os
 import shutil
 
-def rename_jpg_files(directory):
-    # Check if the provided directory exists
-    if not os.path.exists(directory):
-        print(f"The directory '{directory}' does not exist.")
-        return
-
-    # List all files in the directory
-    files = os.listdir(directory)
-
-    # Iterate through the files
-    for filename in files:
-
-        if filename.endswith(".jpg"):
-            filenumerator = "0"
-            # Construct the new filename as you desire
-            new_filename = filenumerator + filename  # You can customize the new name here
-
-            # Build the full paths for the old and new filenames
-            old_path = os.path.join(directory, filename)
-            new_path = os.path.join(directory, new_filename)
-
-            # Rename the file
-            try:
-                shutil.move(old_path, new_path)
-                print(f"Renamed '{filename}' to '{new_filename}'")
-            except Exception as e:
-                print(f"Error renaming '{filename}': {e}")
-            filenumerator += filenumerator
 
 if __name__ == "__main__":
     directory = "/path/to/your/directory"  # Replace with the directory path containing your .jpg files

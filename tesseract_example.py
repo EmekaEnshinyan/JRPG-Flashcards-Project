@@ -9,30 +9,52 @@ from PIL import Image, ImageEnhance, ImageFilter
 #from google.cloud import translate
 import os
 import openpyxl as opx
-import re
+import shutil
+import pandas as pd
 
 
+#when need to read the csv file
+def readCVS(csvPath):
+    pd.read_csv(csvPath)
 
-def renameImage(rootPath):
-    #return a list of elements where each el is the filename str
-    # os.listdir('a') -> ['b.jpg', 'c.png', 'd.mp3']
-    # os.path.join('a', 'b.jpg') -> 'a/b.jpg'
-    imageFns = os.listdir(rootPath)
-    
-    #check if dir exists
-    if not os.path.exists(rootPath):
-        print(f"the directory '{rootPath}' does not exist.")
-        return 
+def rename_jpg_files(directory):
+    # Check if the provided directory exists
+    numerator = "1"
+    if not os.path.exists(directory):
+        print(f"The directory '{directory}' does not exist.")
+        return
+    # List all files in the directory
+    files = os.listdir(directory)
+    for filename in files:
+        if filename.endswith(".jpg"):
+            # Construct the new filename as you desire
+            new_filename = numerator + ".jpg" # You can customize the new name here 00, 01
+            # Build the full paths for the old and new filenames
+            old_path = os.path.join(directory, filename)
+            new_path = os.path.join(directory, new_filename) #->0.jpg
+            # Rename the file
+            try:
+                shutil.move(old_path, new_path)
+                print(f"Renamed '{filename}' to '{new_filename}'")
+            except Exception as e:
+                print(f"Error renaming '{filename}': {e}")
+            #convert filename to int
+            #increment by 1
+            #convert back to string
+            numerator = int(numerator) # '1'
+            numerator += 1 # 2
+            numerator = str(numerator) # '2'
 
-
-def extractTextFromImages(path):
+def extractTextFromImages(path, preprocessedImagePath, outputFilename):
     #open an image 
     # os.path.join('a', 'b', 'c.png') -> '/a/b/c.png'
+    ocredTexts = []
     for imageName in os.listdir(path):
         fullPath = os.path.join(path, imageName)
+        if imageName[-1] != 'g':
+            continue
         #a lazy operation: "bookmarks" images and does not actually open them
         img = Image.open(fullPath)
-    
         # suggested by chatgpt for preprocessing the image
         img = img.filter(ImageFilter.GaussianBlur(radius=1.0))
         enhancer = ImageEnhance.Contrast(img)
@@ -50,7 +72,7 @@ def extractTextFromImages(path):
 
         # Crop the image
         img = img.crop((left, upper, right, lower))
-        img.save(os.path.join(outputRoot, imageName)) # TODO: Watch out this is a global variable
+        img.save(os.path.join(preprocessedImagePath, imageName))
 
         #Emeka's dir
         config = '--tessdata-dir "/home/emeka/Documents/tesseract_data"'
@@ -61,6 +83,28 @@ def extractTextFromImages(path):
         print()
         print(text.replace(" ", "").replace("\n", ""))
         print("\n\n")
+        ocredTexts.append(text)
+
+    with open(outputFilename, "w") as fd: # when with block exits, will invoke a cleanup method file descriptor (address in memory of file)
+        for textInfo in ocredTexts:
+            number = str(textInfo[0])
+            #name = textInfo[1]
+            text = textInfo[1]
+            cleanedText = text.replace(" ", "").replace("\n", "")
+            
+            #examples of how to join the strings
+            # 1. (name) text
+            # number + " " + name + " " + text
+            # " ".join([number, name, text])
+            # f"{number} {name} {text}"
+
+            fd.write(f"{number}. {cleanedText}")
+            fd.write("\n")
+
+    # with open(outputFilename, "r") as fd:
+    #     fileText = fd.read()
+    #     for line in fd.readlines():
+    #         print(line)
     
 
 '''
@@ -98,8 +142,28 @@ if __name__ == "__main__":
     
     #Emeka's imageRoot
     imageRoot = "/home/emeka/Documents/final_fantasy_4"
-    outputRoot = "/home/emeka/Documents/tmp/"
-    renameImage(imageRoot)
+    outputRoot = "/home/emeka/Documents/JRPG-Flashcards-Project/output" # ouput <=> output
+    preprocessedImagePath = "/home/emeka/Documents/JRPG-Flashcards-Project/tmp"
+
+    extractOcrText = os.path.join(outputRoot, "ocred_text.txt")
+    
+    #loop over the files in imageRoot
+    #check if each name is what is expected
+    #yes -> leave it alone
+        #reame to what we want
+    
+    #rename_jpg_files(imageRoot)
+    extractTextFromImages(imageRoot, preprocessedImagePath, extractOcrText)
+
+    
+    
+    
+    
+    
+    
+    
+    
+    '''
     for filename in os.listdir(imageRoot):
         texttoexcel = extractTextFromImages(os.path.join(imageRoot, filename))
     #send text to excel sheet
@@ -114,5 +178,6 @@ if __name__ == "__main__":
         sheet[cellvalue] = texttoexcel
         reg = re.search(r"\d+", col)
         str(int(reg) + 1)
+    '''
     
     #provide dir for excel file below
