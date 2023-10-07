@@ -62,7 +62,7 @@ def extractTextFromImages(path, preprocessedImagePath, outputFilename):
         # process each pixel independently, takes pixelval, turns pixels with values >= 255 to pure white
         # suggested by chatgpt for preprocessing the image
         # !!
-        img = img.filter(ImageFilter.GaussianBlur(radius=1.0))
+        #img = img.filter(ImageFilter.GaussianBlur(radius=1.0))
         enhancer = ImageEnhance.Contrast(img)
         # !!
         img = enhancer.enhance(1.5)  # Adjust the enhancement factor as needed
@@ -93,13 +93,13 @@ def extractTextFromImages(path, preprocessedImagePath, outputFilename):
         ocredTexts.append([imageName, text])
 
     with open(outputFilename, "w") as fd: # when with block exits, will invoke a cleanup method file descriptor (address in memory of file)
+        #TODO: implement a sorting algo. python's sorted() doesn't seem to work
         for textInfo in ocredTexts:
-            if len(textInfo) == 0:
-                continue
             number = str(textInfo[0])
-            #name = textInfo[1]
             text = textInfo[1]
+            
             cleanedText = text.replace(" ", "").replace("\n", "")
+          
             
             #examples of how to join the strings
             # 1. (name) text
