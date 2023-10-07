@@ -2,6 +2,10 @@
 Image - from image format class, used to represent a PIL image. 
 Image functions:
 https://omz-software.com/pythonista/docs/ios/Image.html
+
+Questions:
+1. What are the minimal amount of methods required to get current result
+2. Is there something like a formatting a formatted image -> image quality redution, going on?
 '''
 
 import pytesseract
@@ -55,10 +59,13 @@ def extractTextFromImages(path, preprocessedImagePath, outputFilename):
             continue
         #a lazy operation: "bookmarks" images and does not actually open them
         img = Image.open(fullPath)
+        # process each pixel independently, takes pixelval, turns pixels with values >= 255 to pure white
         # suggested by chatgpt for preprocessing the image
+        # !!
         img = img.filter(ImageFilter.GaussianBlur(radius=1.0))
         enhancer = ImageEnhance.Contrast(img)
-        img = enhancer.enhance(1.0)  # Adjust the enhancement factor as needed
+        # !!
+        img = enhancer.enhance(1.5)  # Adjust the enhancement factor as needed
 
         img = img.convert("L")  # Convert to grayscale
         threshold = 128  # Adjust the threshold as needed
@@ -83,10 +90,12 @@ def extractTextFromImages(path, preprocessedImagePath, outputFilename):
         print()
         print(text.replace(" ", "").replace("\n", ""))
         print("\n\n")
-        ocredTexts.append(text)
+        ocredTexts.append([imageName, text])
 
     with open(outputFilename, "w") as fd: # when with block exits, will invoke a cleanup method file descriptor (address in memory of file)
         for textInfo in ocredTexts:
+            if len(textInfo) == 0:
+                continue
             number = str(textInfo[0])
             #name = textInfo[1]
             text = textInfo[1]
