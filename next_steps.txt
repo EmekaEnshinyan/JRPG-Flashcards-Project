@@ -1,0 +1,2 @@
+- send text to csv
+- look for a proper translation API
